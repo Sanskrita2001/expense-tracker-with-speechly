@@ -3,11 +3,12 @@ import React from 'react';
 import Details from './components/Details/Details';
 import Main from './components/Main/Main';
 import useStyles from './styles';
+import { Provider } from './context/context';
 
 function App() {
 	const classes = useStyles();
 	return (
-		<div>
+		<Provider>
 			<Grid
 				className={classes.grid}
 				container
@@ -26,7 +27,7 @@ function App() {
 					<Details title='Expense' />
 				</Grid>
 			</Grid>
-		</div>
+		</Provider>
 	);
 }
 
