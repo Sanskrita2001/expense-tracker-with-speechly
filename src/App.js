@@ -1,10 +1,10 @@
 import { Grid } from '@material-ui/core';
-import React from 'react';
+import React,{useEffect,useRef} from 'react';
 import Details from './components/Details/Details';
 import Main from './components/Main/Main';
 import useStyles from './styles';
 import { Provider } from './context/context';
-import { SpeechProvider } from '@speechly/react-client';
+import { SpeechState,SpeechProvider, useSpeechContext } from '@speechly/react-client';
 import {
 	ErrorPanel,
 	PushToTalkButton,
@@ -13,6 +13,14 @@ import {
 
 function App() {
 	const classes = useStyles();
+	const { speechState } = useSpeechContext();
+	const main = useRef(null)
+	const executeScroll = () => main.current.scrollIntoView();
+	useEffect(() => {
+		if (speechState === SpeechState.Recording) {
+			executeScroll();
+		}
+	}, [speechState])
 	return (
 		<SpeechProvider
 			appId='2886469d-798d-46de-844f-720ae4749b9e'
@@ -27,13 +35,16 @@ function App() {
 					justify='center'
 					style={{ height: '100vh' }}
 				>
-					<Grid items xs={12} sm={3}>
+					<Grid items xs={12} sm={3} className={classes.mobile}>
 						<Details title='Income' />
 					</Grid>
-					<Grid items xs={12} sm={4}>
+					<Grid ref={main} items xs={12} sm={4} className={classes.main}>
 						<Main />
 					</Grid>
-					<Grid items xs={12} sm={3}>
+					<Grid items xs={12} sm={3} className={classes.desktop}>
+						<Details title='Income' />
+					</Grid>
+					<Grid items xs={12} sm={3} className={classes.last}>
 						<Details title='Expense' />
 					</Grid>
 				</Grid>
